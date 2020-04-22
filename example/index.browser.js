@@ -237,17 +237,17 @@ function raf(task) {
   setTimeout(task, 16);
 }
 
-function setElementScroll(element, x, y) {
+function setElementScroll(scrollSettings, element, x, y) {
   if (element.self === element) {
     element.scrollTo(
-      !parent._scrollSettings.lockX ? x : element.scrollLeft,
-      !parent._scrollSettings.lockY ? y : element.scrollTop
+      !scrollSettings.lockX ? x : element.scrollLeft,
+      !scrollSettings.lockY ? y : element.scrollTop
     );
   } else {
-    if (!parent._scrollSettings.lockX) {
+    if (!scrollSettings.lockX) {
       element.scrollLeft = x;
     }
-    if (!parent._scrollSettings.lockY) {
+    if (!scrollSettings.lockY) {
       element.scrollTop = y;
     }
   }
@@ -318,14 +318,14 @@ function animate(parent) {
     timeValue = Math.min(1 / scrollSettings.time * time, 1);
 
   if (scrollSettings.endIterations >= maxSynchronousAlignments) {
-    setElementScroll(parent, location.x, location.y);
+    setElementScroll(scrollSettings, parent, location.x, location.y);
     parent._scrollSettings = null;
     return scrollSettings.end(COMPLETE);
   }
 
   var easeValue = 1 - scrollSettings.ease(timeValue);
 
-  setElementScroll(parent,
+  setElementScroll(scrollSettings, parent,
     location.x - location.differenceX * easeValue,
     location.y - location.differenceY * easeValue
   );
